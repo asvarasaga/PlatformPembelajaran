@@ -41,25 +41,6 @@ export default function TheoryPage() {
 
   return (
     <div className="h-screen flex flex-col bg-warna3">
-      {/* Header */}
-      <header className="border-b border-border bg-warna1">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <img src="/LOGO UNY.png" alt="Logo" className="h-16 w-16" />
-            <div>
-              <h1 className="text-2xl font-bold text-background">ESP32 Learning Platform</h1>
-              <p className="text-background text-sm">SMK N 3 Yogyakarta - Kelas 11 Teknik Elektronika</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/">
-              <Button className="text-background bg-transparent hover:bg-warna2">Kembali</Button>
-            </Link>
-            <Badge variant="secondary" className="text-sm">Versi 1.0.0</Badge>
-          </div>
-        </div>
-      </header>
-
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
