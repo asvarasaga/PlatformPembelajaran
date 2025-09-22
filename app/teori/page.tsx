@@ -41,7 +41,10 @@ export default function TheoryPage() {
 
   return (
     <div className="h-screen flex flex-col bg-warna3">
+<<<<<<< HEAD
       {/* Header */}
+=======
+>>>>>>> 61999f7f25433b14e711749bfd4ed39dd16774dd
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
