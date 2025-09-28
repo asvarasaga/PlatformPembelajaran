@@ -3,7 +3,6 @@ import { ReactNode } from "react"
 import { Courier_Prime, Geist, Geist_Mono, Roboto } from "next/font/google"
 import Header from "@/components/ui/header"
 import Providers from "./provider"
-import AppClient from "./appClient"
 
 const courierPrime = Courier_Prime({
   subsets: ["latin"],
