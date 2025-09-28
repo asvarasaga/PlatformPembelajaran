@@ -31,7 +31,7 @@ export default function MuridTugasPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [namaSiswa, setNamaSiswa] = useState<string>("");
   const [nomorSiswa, setNomorSiswa] = useState<string>("");
-
+  const [isGuru, setIsGuru] = useState<boolean>(false); // untuk proteksi tombol
   // 🔹 simpan jawaban siswa (idTugas -> array jawaban)
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
   const [jawabanId, setJawabanId] = useState<string | null>(null);
@@ -39,8 +39,10 @@ export default function MuridTugasPage() {
   useEffect(() => {
     const nama = localStorage.getItem("namaSiswa") || "";
     const nomor = localStorage.getItem("nomorSiswa") || "";
+    const state = localStorage.getItem("isGuru") === "true";
     setNamaSiswa(nama);
     setNomorSiswa(nomor);
+    setIsGuru(state);
   }, []);
 
   // 🔹 Ambil data tugas dari Firestore
@@ -202,21 +204,25 @@ export default function MuridTugasPage() {
                 ))}
               </ol>
 
-              {isSubmitted ? (
-                <Button
-                  onClick={() => setIsSubmitted(false)}
-                  className="mt-4 bg-warna6 text-background hover:bg-warna1"
-                >
-                  Edit Jawaban
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleSubmit}
-                  className="mt-4 bg-warna6 text-background hover:bg-warna1"
-                >
-                  Kirim Jawaban
-                </Button>
-              )}
+              {/* tampilkan tombol hanya jika bukan guru */}
+          {!isGuru && (
+            isSubmitted ? (
+              <Button
+                onClick={() => setIsSubmitted(false)}
+                className="mt-4 bg-warna6 text-background hover:bg-warna1"
+              >
+                Edit Jawaban
+              </Button>
+            ) : (
+              <Button
+                onClick={handleSubmit}
+                className="mt-4 bg-warna6 text-background hover:bg-warna1"
+              >
+                Kirim Jawaban
+              </Button>
+            )
+          )}
+
             </>
           ) : (
             <p>Pilih salah satu tugas untuk melihat pertanyaan.</p>

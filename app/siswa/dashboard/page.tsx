@@ -11,6 +11,7 @@ export default function DashboardSiswaPage() {
   const [praktikCount, setPraktikCount] = useState(0);
   const [tugasCount, setTugasCount] = useState(0);
   const [namaSiswa, setNamaSiswa] = useState("");
+  const [isGuru, setIsGuru] = useState<boolean>(false); // untuk proteksi tombol
 
   useEffect(() => {
     const fetchCounts = async () => {
@@ -32,6 +33,9 @@ export default function DashboardSiswaPage() {
 
     // nama siswa tetap dari localStorage (saat login disimpan)
     const savedNama = localStorage.getItem("namaSiswa");
+    const state = localStorage.getItem("isGuru") === "true";
+    setIsGuru(state);
+
     if (savedNama) setNamaSiswa(savedNama);
   }, []);
 
@@ -74,12 +78,15 @@ export default function DashboardSiswaPage() {
             >
               Latihan Simulasi Rangkaian
             </Link>
+            {!isGuru && (
             <Link
               href="/siswa/pengaturan"
               className="bg-warna1 text-background px-3 py-2 rounded hover:bg-warna4"
             >
               Pengaturan
             </Link>
+          )}
+
           </nav>
         </div>
 
