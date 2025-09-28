@@ -64,40 +64,47 @@ export default function MuridTugasPage() {
 
   fetchTugas();
 }, []);
+
   // 🔹 Cek apakah siswa sudah pernah mengisi jawaban
   useEffect(() => {
-    const fetchJawabanSiswa = async () => {
-      if (!selected || !namaSiswa || !nomorSiswa) return;
+  const fetchJawabanSiswa = async () => {
+    if (!selected || !namaSiswa || !nomorSiswa) return;
 
-      try {
-        const q = query(
-          collection(db, "jawaban"),
-          where("tugasId", "==", selected.id),
-          where("namaSiswa", "==", namaSiswa),
-          where("nomorSiswa", "==", nomorSiswa)
-        );
-        const snap = await getDocs(q);
+    try {
+      const q = query(
+        collection(db, "jawaban"),
+        where("tugasId", "==", selected.id),
+        where("namaSiswa", "==", namaSiswa),
+        where("nomorSiswa", "==", nomorSiswa)
+      );
+      const snap = await getDocs(q);
 
-        if (!snap.empty) {
-          const docRef = snap.docs[0];
-          const docData = docRef.data();
-          setAnswers((docData.answers as Record<string, string[]>) || {});
-          setJawabanId(docRef.id);
-          setIsSubmitted(true);
-        } else {
-          setAnswers({
-            [selected.id]: new Array(selected.questions.length).fill(""),
-          });
-          setJawabanId(null);
-          setIsSubmitted(false);
-        }
-      } catch (err) {
-        console.error("Gagal cek jawaban siswa:", err);
+      if (!snap.empty) {
+        const docRef = snap.docs[0];
+        const docData = docRef.data();
+
+        // ✅ pastikan struktur sesuai { [tugasId]: string[] }
+        setAnswers({
+          [selected.id]: docData.answers[selected.id] || [],
+        });
+
+        setJawabanId(docRef.id);
+        setIsSubmitted(true);
+      } else {
+        setAnswers({
+          [selected.id]: new Array(selected.questions.length).fill(""),
+        });
+        setJawabanId(null);
+        setIsSubmitted(false);
       }
-    };
+    } catch (err) {
+      console.error("Gagal cek jawaban siswa:", err);
+    }
+  };
 
-    fetchJawabanSiswa();
-  }, [selected, namaSiswa, nomorSiswa]);
+  fetchJawabanSiswa();
+}, [selected, namaSiswa, nomorSiswa]);
+
 
   const handleAnswerChange = (index: number, value: string) => {
     if (!selected) return;

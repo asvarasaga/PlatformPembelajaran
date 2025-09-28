@@ -310,7 +310,7 @@ export default function LatihanPage() {
                 </Button>
               )
               }
-              {isComplete && !sudahSubmit && !isSiswa && isGuru !== true && (
+              {isComplete && !sudahSubmit && isSiswa && isGuru !== true && (
                 <div className="flex gap-4">
                   <Button
                     onClick={submitLatihan}
