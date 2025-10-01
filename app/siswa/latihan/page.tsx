@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { db } from "@/lib/firebase"
 import { collection, 
@@ -21,21 +21,63 @@ export default function LatihanPage() {
   const [selesaiList, setSelesaiList] = useState<string[]>([]) // 🔹 list latihan yang sudah submit
   const [isSiswa, setIsSiswa] = useState<Boolean>(false) // 🔹 apakah ini siswa (bukan guru)
   const [isGuru, setIsGuru] = useState<Boolean>(false) // 🔹 apakah ini guru (bukan siswa)
-  
+  const [timer, setTimer] = useState(0) // detik
+  const [isRunning, setIsRunning] = useState(false)
+  const timerRef = useRef <NodeJS.Timeout | null>(null)
+  const startTimeRef = useRef<number | null>(null)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
   // 🔹 Reset kode
   const resetUserCode = () => {
     setUserCode("")
+    setTimer(0)
+    setIsRunning(false)
+    if (timerRef.current) clearInterval(timerRef.current)
     localStorage.removeItem("userCode")
   }
+  // Format waktu jadi mm:ss
+    const formatTime = (ms: number) => {
+  const minutes = Math.floor(ms / 60000)
+  const seconds = Math.floor((ms % 60000) / 1000)
+  const millis = Math.floor(ms % 1000)
 
+  if (minutes > 0) {
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}.${millis.toString().padStart(3, "0")}`
+  }
+
+  return `${seconds.toString().padStart(2, "0")}.${millis
+    .toString()
+    .padStart(3, "0")}`
+}
   // 🔹 Selesaikan kode (langsung isi semua)
   const completeUserCode = () => {
     if (currentLatihan) {
       setUserCode(currentLatihan.code)
       localStorage.setItem("userCode", currentLatihan.code)
+      stopTimer()
     }
   }
+  const startTimer = () => {
+  if (!isRunning) {
+    setIsRunning(true)
+    startTimeRef.current = Date.now() - timer // resume dari posisi terakhir
+    intervalRef.current = setInterval(() => {
+      setTimer(Date.now() - (startTimeRef.current || 0))
+    }, 10) // update setiap 10ms
+  }
+}
+  const stopTimer = () => {
+  setIsRunning(false)
+  if (intervalRef.current) clearInterval(intervalRef.current)
+}
 
+const resetTimer = () => {
+  setIsRunning(false)
+  if (intervalRef.current) clearInterval(intervalRef.current)
+  setTimer(0)
+  startTimeRef.current = null // ✅ reset base time juga
+}
   // 🔹 Ambil data latihan & identitas siswa
   useEffect(() => {
   const fetchLatihan = async () => {
@@ -115,6 +157,13 @@ export default function LatihanPage() {
   const isComplete = currentLatihan && userCode === currentLatihan.code
   const sudahSubmit = currentLatihan && selesaiList.includes(currentLatihan.id)
   const siswasubmit = isSiswa === true
+
+  useEffect(() => {
+    if (isComplete) {
+      stopTimer()
+    }
+  }, [isComplete])
+
   // 🔹 Submit jawaban ke Firestore
   const submitLatihan = async () => {
     if (!nama || !noAbsen) {
@@ -127,10 +176,11 @@ export default function LatihanPage() {
       const docId = `${currentLatihan.id}_${noAbsen}`
 
       await setDoc(doc(db, "latihan_murid", docId), {
-        nama,
+         nama,
         noAbsen,
         latihanId: currentLatihan.id,
         status: "selesai",
+        waktu: timer, // simpan timer ke firestore
         timestamp: new Date(),
       })
 
@@ -234,47 +284,55 @@ export default function LatihanPage() {
               </Button>)}
               </h2>
             </h1>
-            <p className="text-muted-foreground mb-4">{currentLatihan.desc}</p>
-
+            <p className="flex justify-between text-muted-foreground mb-1">{currentLatihan.desc} <div className="text-lg font-mono p-2 rounded">
+                          ⏱ Timer: {formatTime(timer)}
+                        </div></p>
+            
             <div className="relative w-full h-64 mb-4">
               <pre className="absolute inset-0 bg-black text-muted-foreground p-4 rounded-lg overflow-x-auto opacity-40 pointer-events-none font-mono">
                 {currentLatihan.code}
               </pre>
 
               <textarea
-                value={userCode}
-                onChange={(e) => {
-                  const input = e.target.value
-                  const nextCharIndex = userCode.length
-                  const targetCode = currentLatihan.code
+  value={userCode}
+  onChange={(e) => {
+    const input = e.target.value
+    const nextCharIndex = userCode.length
+    const targetCode = currentLatihan.code
 
-                  if (input.length < userCode.length) {
-                    setUserCode(input)
-                    return
-                  }
+    // 🔹 mulai timer kalau belum jalan
+    if (!isRunning) startTimer()
 
-                  const nextChar = input[input.length - 1]
-                  if (targetCode[nextCharIndex] === nextChar) {
-                    setUserCode(input)
-                  }
-                }}
-                className="absolute inset-0 w-full h-full p-4 bg-transparent font-mono text-foreground overflow-x-auto rounded-lg resize-none"
-                onCopy={(e) => e.preventDefault()}
-                onPaste={(e) => e.preventDefault()}
-                onCut={(e) => e.preventDefault()}
-                onContextMenu={(e) => e.preventDefault()}
-                onKeyDown={(e) => {
-                if ((e.ctrlKey || e.metaKey) && ["v", "c", "x"].includes(e.key.toLowerCase())) {
-                  e.preventDefault()
-                } 
-              }}
-              />
+    if (input.length < userCode.length) {
+      setUserCode(input)
+      return
+    }
+
+    const nextChar = input[input.length - 1]
+    if (targetCode[nextCharIndex] === nextChar) {
+      setUserCode(input)
+    }
+  }}
+  className="absolute inset-0 w-full h-full p-4 bg-transparent font-mono text-foreground overflow-x-auto rounded-lg resize-none"
+  onCopy={(e) => e.preventDefault()}
+  onPaste={(e) => e.preventDefault()}
+  onCut={(e) => e.preventDefault()}
+  onContextMenu={(e) => e.preventDefault()}
+  onKeyDown={(e) => {
+    if ((e.ctrlKey || e.metaKey) && ["v", "c", "x"].includes(e.key.toLowerCase())) {
+      e.preventDefault()
+    } 
+  }}
+/>
             </div>
 
             <div className="flex mb-4 ">
               {/* Logika tombol */}
                 <Button
-                  onClick={resetUserCode}
+                  onClick={() => {
+                    resetUserCode()
+                    resetTimer()
+                  }}
                   className="bg-foreground text-background px-4 py-2 rounded hover:bg-warna6 hover:text-foreground"
                 >
                   Reset Kode
@@ -302,24 +360,18 @@ export default function LatihanPage() {
               </div>
               
               <div className="ml-auto">
-                {sudahSubmit && ( <Button
-                  onClick={completeUserCode}
+                {!isGuru && (
+            <div className="ml-auto">
+              {(isComplete && !sudahSubmit) || (!isComplete && sudahSubmit) ? (
+                <Button
+                  onClick={isComplete && !sudahSubmit ? submitLatihan : completeUserCode}
                   className="bg-warna2 text-background px-4 py-2 rounded hover:bg-warna4"
                 >
-                  Selesaikan Kode
+                  {isComplete && !sudahSubmit ? "Submit Latihan" : "Selesaikan Kode"}
                 </Button>
-              )
-              }
-              {isComplete && !sudahSubmit && isSiswa && isGuru !== true && (
-                <div className="flex gap-4">
-                  <Button
-                    onClick={submitLatihan}
-                    className="bg-warna2 text-background px-4 py-2 rounded hover:bg-warna4"
-                  >
-                    Submit Latihan
-                  </Button>
-                </div>
-              )}
+              ) : null}
+            </div>
+          )}
               </div>
             </div>
           </>

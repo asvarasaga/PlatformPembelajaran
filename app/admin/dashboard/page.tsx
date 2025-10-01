@@ -98,6 +98,15 @@ export default function DashboardPage() {
               Pengumpulan Tugas
             </Link>
             
+
+            <Link
+              href="/admin/progress"
+              className="bg-warna1 text-background px-3 py-2 rounded hover:bg-warna4"
+            >
+            
+              Progress Latihan
+            </Link>
+
             <Link
               href="/siswa/dashboard"
               className="bg-warna1 text-background px-3 py-2 rounded hover:bg-warna4"
@@ -105,7 +114,7 @@ export default function DashboardPage() {
             
               Ke dashboard murid
             </Link>
-
+            
             <Link
               href="/admin/pengaturan"
               className="bg-warna1 text-background px-3 py-2 rounded hover:bg-warna4"
