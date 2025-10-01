@@ -43,7 +43,16 @@ export default function GuruLatihanPage() {
     }
     setLoading(false)
   }
-
+  const formatTime = (ms: number) => {
+      if (!ms && ms !== 0) return "-"
+      const totalSeconds = Math.floor(ms / 1000)
+      const minutes = Math.floor(totalSeconds / 60)
+      const seconds = totalSeconds % 60
+      const milliseconds = ms % 1000
+      return `${minutes}:${seconds.toString().padStart(2, "0")}.${milliseconds
+        .toString()
+        .padStart(3, "0")}`
+    }
   return (
     <div className="flex h-screen bg-warna3">
       {/* Sidebar daftar latihan */}
@@ -93,6 +102,9 @@ export default function GuruLatihanPage() {
                     {selesaiMurid.map((m) => (
                       <li key={m.id}>
                         {m.nama} (Absen {Number(m.noAbsen)})
+                        <span className="ml-2 text-sm text-muted-foreground">
+                              ⏱️ {formatTime(m.waktu)}
+                            </span>
                       </li>
                     ))}
                   </ul>
