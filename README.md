@@ -40,25 +40,13 @@ Replace each value with your actual Firebase project credentials.
 
 # 📦 Deployment
 
-You can deploy this project using Vercel or Firebase Hosting.
-
-# ▶️ Deploy with Firebase
-npm run build
-firebase deploy
+You can deploy this project using Vercel.
 
 # ▶️ Deploy with Vercel
 
 Go to Vercel Deployment Page
 
 and link your GitHub repository.
-
-# 📚 Resources
-
-Next.js Documentation
-
-Firebase Firestore Docs
-
-Tailwind CSS Guide
 
 # 👨‍💻 Developer
 
