@@ -23,12 +23,17 @@ This app allows teachers to create, edit, and delete students, assign exercises,
 
 Create a [.env.local] file in your project root and add your Firebase configuration:
 
-**NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id**
+**NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key*
+
+**NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain*
+
+**NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id*
+
+**NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket*
+
+**NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id*
+
+**NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id*
 
 
 Replace each value with your actual Firebase project credentials.
