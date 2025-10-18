@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📘 Interactive Learning Platform
 
-## Getting Started
+An **interactive learning platform** built with **Next.js** and **Firebase**, designed to help teachers manage students, exercises, and real-time submissions easily.
 
-First, run the development server:
+This app allows teachers to create, edit, and delete students, assign exercises, monitor student progress, and automatically remove related data when a student is deleted.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
+🧩Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+👩‍🏫 Student Management — Add, edit, and delete student data in real time.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🧠 Exercise Module — Teachers can create and manage exercises for students.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+💬 Answer Tracking — Student answers are stored automatically in Firestore.
 
-## Learn More
+🔁 Firebase Integration — Data is synchronized instantly across all clients.
 
-To learn more about Next.js, take a look at the following resources:
+💾 Local Session Storage — Keeps user sessions persistent locally.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+🧹 Cascade Delete — When a student is deleted, their related data in latihan_murid and jawaban is also removed.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+⚙️ Environment Setup
 
-## Deploy on Vercel
+Create a [.env.local] file in your project root and add your Firebase configuration:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id]
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+Replace each value with your actual Firebase project credentials.
+
+📦 Deployment
+
+You can deploy this project using Vercel or Firebase Hosting.
+
+▶️ Deploy with Firebase
+npm run build
+firebase deploy
+
+▶️ Deploy with Vercel
+
+Go to Vercel Deployment Page
+
+and link your GitHub repository.
+
+📚 Resources
+
+Next.js Documentation
+
+Firebase Firestore Docs
+
+Tailwind CSS Guide
+
+👨‍💻 Developer
+
+Developed by Maulana Rizal
