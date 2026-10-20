@@ -27,7 +27,7 @@ const roboto = Roboto({
 
 export const metadata = {
   title: "Platform Belajar",
-  description: "Default description",
+  description: "Labsheet digital Pemrograman Sistem Embedded untuk siswa kelas XI Teknik Elektronika Industri SMK N 3 Yogyakarta",
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <div className="text-center text-background">
                 <p>© 2025 SMK N 3 Yogyakarta - Platform Pembelajaran ESP32</p>
                 <p className="text-sm mt-1">
-                  Dikembangkan untuk melatih kemampuan Antarmuka dan Komunikasi Data siswa Teknik Elektronika
+                  Labsheet digital Pemrograman Sistem Embedded untuk siswa Teknik Elektronika Industri
                 </p>
               </div>
             </div>

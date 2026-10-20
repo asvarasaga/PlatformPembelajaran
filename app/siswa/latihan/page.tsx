@@ -276,17 +276,20 @@ const resetTimer = () => {
       <main className="flex-1 bg-warna5 m-4 p-6 rounded-xl shadow overflow-y-auto">
         {currentLatihan ? (
           <>
-            <h1 className="text-2xl font-bold mb-4"><h2 className="flex justify-between">{currentLatihan.title}
-              {isGuru === true &&(<Button className="p-2 rounded inclined-block" onClick={() => {
-                completeUserCode()
-              }
-            }   > Complete Code
-              </Button>)}
-              </h2>
-            </h1>
-            <p className="flex justify-between text-muted-foreground mb-1">{currentLatihan.desc} <div className="text-lg font-mono p-2 rounded">
-                          ⏱ Timer: {formatTime(timer)}
-                        </div></p>
+            <div className="flex justify-between items-center mb-4">
+              <h1 className="text-2xl font-bold">{currentLatihan.title}</h1>
+              {isGuru === true && (
+                <Button className="p-2 rounded inline-block" onClick={() => completeUserCode()}>
+                  Complete Code
+                </Button>
+              )}
+            </div>
+            <div className="flex justify-between text-muted-foreground mb-1">
+              <p>{currentLatihan.desc}</p>
+              <div className="text-lg font-mono p-2 rounded">
+                ⏱ Timer: {formatTime(timer)}
+              </div>
+            </div>
             
             <div className="relative w-full h-64 mb-4">
               <pre className="absolute inset-0 bg-black text-muted-foreground p-4 rounded-lg overflow-x-auto opacity-40 pointer-events-none font-mono">

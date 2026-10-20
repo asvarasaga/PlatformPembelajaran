@@ -40,19 +40,19 @@ export default function Header() {
     <header className="border-b border-border bg-warna1 flex p-4 justify-between items-center">
       <div className="flex items-center gap-4">
         <img src="/LOGO_UNY.png" alt="logo" className="h-16 w-16" />
+        {role && (
+          <>
+            <Button onClick={() => router.back()}>
+              ← Kembali
+            </Button>
+            <Link href="/">
+              <img src="/home.png" alt="home" className="h-6 w-6" />
+            </Link>
+          </>
+        )}
       </div>
 
       <div className="flex gap-3">
-        {role === "admin" && (
-          <Link href="/admin/dashboard">
-            <img src="/home.png" alt="home" className="h-6 w-6" />
-          </Link>
-        )}
-        {role === "siswa" && (
-          <Link href="/siswa/dashboard">
-            <img src="/home.png" alt="home" className="h-6 w-6" />
-          </Link>
-        )}
         {role ? (
           <Button onClick={handleLogout} className="flex gap-3">
             Logout
